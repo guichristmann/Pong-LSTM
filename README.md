@@ -22,19 +22,21 @@ Each line of a log session is a frame of the game with all the information prese
 #### *pong_cpu_sessions.py*
 For now, I've implemented a version of the Game with a simple CPU-controlled AI for generating enough data to build and debug LSTM models.
 Usage: *python pong_cpu_sessions.py <logs-folder>*
+
 Receives a path to a folder as an argument, where the log sessions will be dumped. A new session is created each time a point is scored for either side.
 
 ## Training
 Training is performed by randomly selecting a number of log sessions for each epoch. Each session is imported as a numpy array and reformatted for LSTM training - (samples, timesteps, features). A parameter called HISTORY_SIZE defines the number of timesteps (or frames) from which the LSTM will learn to predict the next. An X, Y pair for training will contain frame **I** to **HISTORY_SIZE** for X and frame **I+HISTORY_SIZE+1** For Y, and so on for each frame of the log session. An important thing to note is that data is not shuffled (parameter shuffle=False when fitting the model with Keras), so X, Y pairs are presented to the LSTM in sequence.
 
 #### *train_model.py*
-Usage: *python train_model.py <log-sessions-path> <model-name>*
+Usage: *python train_model.py \<log-sessions-path\> \<model-name\>*
+
 First argument is the path to folder containing the sessions. Second argument is the name of model to save.
 
 ## "Playing" with a Model
 
 #### *pong_lstm.py*
-Usage: *python pong_lstm.py <model>*
+Usage: *python pong_lstm.py \<model\>*
 Receives a path to a model as argument.
 
 The engine runs for the first *HISTORY_SIZE* frames to give some initial frames for the LSTM to perform its first prediction and from then on the **Lstm_Input()** function will take care of the rest of the game. This is effectively how the model "imagines" a pong game.
